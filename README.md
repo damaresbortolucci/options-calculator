@@ -142,9 +142,6 @@ npm run serve
 3. **CommonModule:** Importado para usar diretivas estruturais
 4. **Tailwind CDN:** Usado para facilitar a configuração (considere instalação via npm em produção)
 
-## 🎓 Baseado Em
-
-Apostila 13 - Módulo 4: Booster Options • Metadolar-Tech
 
 ## ⚠️ Aviso Legal
 

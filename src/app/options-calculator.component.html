@@ -1,0 +1,545 @@
+<div
+  class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white p-4 md:p-8 font-sans"
+>
+  <!-- Liquid Glass Background Effects -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div
+      class="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-transparent rounded-full blur-3xl animate-pulse"
+    ></div>
+    <div
+      class="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-br from-violet-500/20 to-transparent rounded-full blur-3xl animate-pulse"
+      style="animation-delay: 1s"
+    ></div>
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-blue-500/10 to-transparent rounded-full blur-3xl"
+    ></div>
+  </div>
+
+  <div class="relative max-w-6xl mx-auto">
+    <!-- Header -->
+    <header class="text-center mb-10">
+      <div class="inline-flex items-center gap-3 mb-4">
+        <img
+          src="../assets/img/xandao-dolar-logo.png"
+          alt="Xandão Dólar Logo"
+          class="w-52 flex items-center justify-center"
+        />
+        <!-- <div
+          class="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30"
+        >
+          <span class="text-2xl font-black">M</span>
+        </div>
+        <span class="text-slate-500 text-sm tracking-widest uppercase"
+          >Metadolar-Tech</span
+        > -->
+      </div>
+      <h1
+        class="text-4xl md:text-5xl font-black bg-gradient-to-r from-white via-cyan-200 to-white bg-clip-text text-transparent mb-3"
+      >
+        B Points & V Points
+      </h1>
+      <p class="text-slate-400 text-lg">
+        Calculadora de Níveis Críticos para Day Trade
+      </p>
+      <p class="text-slate-500 text-sm mt-2">
+        14 de Fevereiro de 2026 • Superfície de Volatilidade B3
+      </p>
+    </header>
+
+    <!-- Input Controls -->
+    <div class="grid md:grid-cols-2 gap-4 mb-8">
+      <div
+        class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl"
+      >
+        <label
+          class="text-sm text-slate-400 uppercase tracking-wider mb-3 block"
+          >Preço Spot (Dólar Futuro)</label
+        >
+        <div class="flex items-center gap-4">
+          <input
+            type="range"
+            min="5000"
+            max="5500"
+            step="0.5"
+            [(ngModel)]="spotPrice"
+            (input)="onSpotPriceChange()"
+            class="flex-1 h-2 bg-slate-700 rounded-full appearance-none cursor-pointer accent-cyan-500"
+          />
+          <div
+            class="bg-slate-800/80 rounded-2xl px-5 py-3 min-w-[140px] text-center border border-white/5"
+          >
+            <span class="text-3xl font-bold text-cyan-400">{{
+              formatPrice(spotPrice)
+            }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl"
+      >
+        <label
+          class="text-sm text-slate-400 uppercase tracking-wider mb-3 block"
+          >Vencimento da Opção</label
+        >
+        <div class="flex flex-wrap gap-2">
+          <button
+            *ngFor="let data of getFirstSixExpiries()"
+            (click)="onExpiryChange(data.date)"
+            [class]="
+              selectedExpiry === data.date
+                ? 'px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/30'
+                : 'px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 border border-white/5'
+            "
+          >
+            {{ data.date.toUpperCase() }}
+          </button>
+        </div>
+        <p class="text-xs text-slate-500 mt-3">
+          📅 {{ daysToExpiry }} dias até o vencimento
+        </p>
+      </div>
+    </div>
+
+    <!-- ATM Reference -->
+    <div
+      class="backdrop-blur-xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 rounded-3xl p-6 mb-8 border border-amber-500/20"
+    >
+      <div
+        class="flex flex-col md:flex-row md:items-center justify-between gap-4"
+      >
+        <div>
+          <span class="text-amber-400 text-sm uppercase tracking-wider"
+            >Referência ATM (Delta 50)</span
+          >
+          <p class="text-3xl font-black text-white mt-1">
+            {{ formatPrice(criticalPoints.atm) }}
+            <span class="text-lg text-slate-400">pontos</span>
+          </p>
+        </div>
+        <div class="flex items-center gap-6">
+          <div>
+            <span class="text-slate-500 text-xs uppercase">Vol. Implícita</span>
+            <p class="text-xl font-bold text-amber-400">
+              {{ criticalPoints.atmVol }}%
+            </p>
+          </div>
+          <div>
+            <span class="text-slate-500 text-xs uppercase">Probabilidade</span>
+            <p class="text-xl font-bold text-amber-400">50%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Critical Points Grid -->
+    <div class="grid md:grid-cols-2 gap-6 mb-8">
+      <!-- V Points - Suportes -->
+      <div
+        class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-emerald-500/20 shadow-2xl"
+      >
+        <div class="flex items-center gap-3 mb-6">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center"
+          >
+            <span class="text-lg">📉</span>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-emerald-400">V Points</h2>
+            <p class="text-slate-500 text-sm">Suportes • Aceleração de Baixa</p>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div
+            *ngFor="let point of criticalPoints.vPoints"
+            [class]="
+              'relative overflow-hidden rounded-2xl p-4 bg-gradient-to-r ' +
+              getStrengthColor(point.strength) +
+              ' backdrop-blur-sm'
+            "
+          >
+            <div class="absolute inset-0 bg-slate-900/60"></div>
+            <div class="relative flex items-center justify-between">
+              <div>
+                <span
+                  class="text-xs text-emerald-300 uppercase tracking-wider"
+                  >{{ point.label }}</span
+                >
+                <p class="text-2xl font-black text-white">
+                  {{ formatPrice(point.strike) }}
+                </p>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-400"
+                  >Delta {{ point.delta }}%</span
+                >
+                <p class="text-sm text-emerald-300">Vol: {{ point.vol }}%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="mt-4 p-4 bg-emerald-500/10 rounded-xl border border-emerald-500/20"
+        >
+          <p class="text-sm text-slate-300">
+            <strong class="text-emerald-400">Se rompido:</strong> Vendedores de
+            Puts são forçados a VENDER dólar futuro, acelerando a queda.
+          </p>
+        </div>
+      </div>
+
+      <!-- B Points - Resistências -->
+      <div
+        class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-rose-500/20 shadow-2xl"
+      >
+        <div class="flex items-center gap-3 mb-6">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-400 to-red-600 flex items-center justify-center"
+          >
+            <span class="text-lg">📈</span>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-rose-400">B Points</h2>
+            <p class="text-slate-500 text-sm">
+              Resistências • Aceleração de Alta
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div
+            *ngFor="let point of criticalPoints.bPoints"
+            [class]="
+              'relative overflow-hidden rounded-2xl p-4 bg-gradient-to-r ' +
+              getStrengthColor(point.strength) +
+              ' backdrop-blur-sm'
+            "
+          >
+            <div class="absolute inset-0 bg-slate-900/60"></div>
+            <div class="relative flex items-center justify-between">
+              <div>
+                <span class="text-xs text-rose-300 uppercase tracking-wider">{{
+                  point.label
+                }}</span>
+                <p class="text-2xl font-black text-white">
+                  {{ formatPrice(point.strike) }}
+                </p>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-400"
+                  >Delta {{ point.delta }}%</span
+                >
+                <p class="text-sm text-rose-300">Vol: {{ point.vol }}%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="mt-4 p-4 bg-rose-500/10 rounded-xl border border-rose-500/20"
+        >
+          <p class="text-sm text-slate-300">
+            <strong class="text-rose-400">Se rompido:</strong> Vendedores de
+            Calls são forçados a COMPRAR dólar futuro, acelerando a alta.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Price Ladder -->
+    <div
+      class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl mb-8"
+    >
+      <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+        <span>📊</span> Escada de Preços - Níveis Operacionais
+      </h3>
+
+      <div class="relative h-80">
+        <!-- Central Line -->
+        <div
+          class="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-rose-500 via-amber-500 to-emerald-500"
+        ></div>
+
+        <!-- Spot Price Marker -->
+        <div
+          class="absolute left-1/2 -translate-x-1/2 flex items-center z-20"
+          style="top: 45%"
+        >
+          <div
+            class="bg-amber-500 text-slate-900 px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg shadow-amber-500/50"
+          >
+            <div class="w-2 h-2 bg-slate-900 rounded-full animate-ping"></div>
+            SPOT: {{ formatPrice(spotPrice) }}
+          </div>
+        </div>
+
+        <!-- B Points on right -->
+        <div
+          *ngFor="let point of criticalPoints.bPoints; let idx = index"
+          class="absolute right-4 flex items-center gap-3"
+          [style.top.%]="15 + idx * 12"
+        >
+          <div
+            class="w-3 h-3 rounded-full bg-rose-500 shadow-lg shadow-rose-500/50"
+          ></div>
+          <div
+            class="bg-rose-500/20 border border-rose-500/40 rounded-xl px-4 py-2"
+          >
+            <span class="text-xs text-rose-300">{{ point.label }}</span>
+            <p class="text-lg font-bold text-white">
+              {{ formatPrice(point.strike) }}
+            </p>
+          </div>
+        </div>
+
+        <!-- V Points on left -->
+        <div
+          *ngFor="let point of getReversedVPoints(); let idx = index"
+          class="absolute left-4 flex items-center gap-3 flex-row-reverse"
+          [style.top.%]="60 + idx * 12"
+        >
+          <div
+            class="w-3 h-3 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50"
+          ></div>
+          <div
+            class="bg-emerald-500/20 border border-emerald-500/40 rounded-xl px-4 py-2 text-right"
+          >
+            <span class="text-xs text-emerald-300">{{ point.label }}</span>
+            <p class="text-lg font-bold text-white">
+              {{ formatPrice(point.strike) }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Strategy Tips -->
+    <div
+      class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl mb-8"
+    >
+      <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+        <span>💡</span> Estratégias de Day Trade
+      </h3>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div
+          class="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-2xl p-5 border border-emerald-500/20"
+        >
+          <h4 class="font-bold text-emerald-400 mb-2">Operação de Compra</h4>
+          <ul class="text-sm text-slate-300 space-y-2">
+            <li>• Entrada próxima aos V Points (suportes)</li>
+            <li>
+              • Stop abaixo do V Point Extremo ({{
+                formatPrice(criticalPoints.vPoints[0].strike || 0)
+              }})
+            </li>
+            <li>• Alvo 1: ATM ({{ formatPrice(criticalPoints.atm) }})</li>
+            <li>
+              • Alvo 2: Primeiro B Point ({{
+                formatPrice(criticalPoints.bPoints[0].strike || 0)
+              }})
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="bg-gradient-to-br from-rose-500/10 to-red-500/10 rounded-2xl p-5 border border-rose-500/20"
+        >
+          <h4 class="font-bold text-rose-400 mb-2">Operação de Venda</h4>
+          <ul class="text-sm text-slate-300 space-y-2">
+            <li>• Entrada próxima aos B Points (resistências)</li>
+            <li>
+              • Stop acima do B Point Extremo ({{
+                formatPrice(criticalPoints.bPoints[2].strike || 0)
+              }})
+            </li>
+            <li>• Alvo 1: ATM ({{ formatPrice(criticalPoints.atm) }})</li>
+            <li>
+              • Alvo 2: Primeiro V Point ({{
+                formatPrice(criticalPoints.vPoints[2].strike || 0)
+              }})
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Educational Toggle -->
+    <button
+      (click)="toggleDetails()"
+      class="w-full backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl mb-8 text-left transition-all hover:bg-white/10"
+    >
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">📚</span>
+          <span class="font-bold text-white"
+            >Entenda a Teoria: Delta Hedge e Pontos Críticos</span
+          >
+        </div>
+        <span
+          [class]="'transition-transform ' + (showDetails ? 'rotate-180' : '')"
+          >▼</span
+        >
+      </div>
+    </button>
+
+    <div
+      *ngIf="showDetails"
+      class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl mb-8 space-y-6"
+    >
+      <div>
+        <h4 class="font-bold text-cyan-400 mb-2">O que é Delta?</h4>
+        <p class="text-slate-300 text-sm">
+          O Delta mede a sensibilidade do preço da opção em relação ao preço do
+          ativo. No contexto da superfície de volatilidade, o Delta (%) serve
+          como proxy para a <strong>probabilidade</strong> da opção terminar "no
+          dinheiro" (ITM).
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="bg-slate-800/50 rounded-xl p-4">
+          <span class="text-amber-400 font-bold">Delta 50 (ATM)</span>
+          <p class="text-slate-400 text-sm mt-1">
+            50% de chance de exercício. É o preço justo do mercado.
+          </p>
+        </div>
+        <div class="bg-slate-800/50 rounded-xl p-4">
+          <span class="text-cyan-400 font-bold">Delta 25/75</span>
+          <p class="text-slate-400 text-sm mt-1">
+            Proteções comuns. Exigem ajuste significativo de hedge.
+          </p>
+        </div>
+        <div class="bg-slate-800/50 rounded-xl p-4">
+          <span class="text-violet-400 font-bold">Delta 10/90</span>
+          <p class="text-slate-400 text-sm mt-1">
+            Proteções extremas. Seguro ultrabarato para cenários extremos.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-cyan-400 mb-2">Mecanismo de Delta Hedge</h4>
+        <p class="text-slate-300 text-sm">
+          Quando o preço se aproxima de um B Point ou V Point, os grandes
+          players (vendedores de opções) são
+          <strong> obrigados</strong> a ajustar suas posições no Dólar Futuro
+          para manter o portfólio Delta-Neutro. Esse ajuste forçado cria
+          <strong>aceleração no movimento</strong> do preço.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-rose-500/10 border border-rose-500/20 rounded-xl p-4">
+          <h5 class="font-bold text-rose-400 mb-2">B Point Rompido ⬆️</h5>
+          <p class="text-slate-300 text-sm">
+            Vendedores de Calls precisam COMPRAR dólar futuro → Demanda aumenta
+            → Preço acelera para CIMA
+          </p>
+        </div>
+        <div
+          class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4"
+        >
+          <h5 class="font-bold text-emerald-400 mb-2">V Point Rompido ⬇️</h5>
+          <p class="text-slate-300 text-sm">
+            Vendedores de Puts precisam VENDER dólar futuro → Oferta aumenta →
+            Preço acelera para BAIXO
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Volatility Surface Mini Table -->
+    <div
+      class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl"
+    >
+      <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+        <span>📈</span> Superfície de Volatilidade (Vencimento:
+        {{ selectedExpiry.toUpperCase() }})
+      </h3>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-white/10">
+              <th class="text-left py-3 px-2 text-slate-400 font-medium">
+                Delta
+              </th>
+              <th class="text-center py-3 px-2 text-emerald-400">10%</th>
+              <th class="text-center py-3 px-2 text-emerald-400">25%</th>
+              <th class="text-center py-3 px-2 text-emerald-400">37%</th>
+              <th class="text-center py-3 px-2 text-amber-400 font-bold">
+                50%
+              </th>
+              <th class="text-center py-3 px-2 text-rose-400">63%</th>
+              <th class="text-center py-3 px-2 text-rose-400">75%</th>
+              <th class="text-center py-3 px-2 text-rose-400">90%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="py-3 px-2 text-slate-400">Vol. Implícita</td>
+              <td class="text-center py-3 px-2 text-emerald-300">
+                {{ selectedData.d10 }}%
+              </td>
+              <td class="text-center py-3 px-2 text-emerald-300">
+                {{ selectedData.d25 }}%
+              </td>
+              <td class="text-center py-3 px-2 text-emerald-300">
+                {{ selectedData.d37 }}%
+              </td>
+              <td class="text-center py-3 px-2 text-amber-300 font-bold">
+                {{ selectedData.d50 }}%
+              </td>
+              <td class="text-center py-3 px-2 text-rose-300">
+                {{ selectedData.d63 }}%
+              </td>
+              <td class="text-center py-3 px-2 text-rose-300">
+                {{ selectedData.d75 }}%
+              </td>
+              <td class="text-center py-3 px-2 text-rose-300">
+                {{ selectedData.d90 }}%
+              </td>
+            </tr>
+            <tr class="border-t border-white/5">
+              <td class="py-3 px-2 text-slate-400">Strike Aprox.</td>
+              <td class="text-center py-3 px-2 text-emerald-300 font-mono">
+                {{ formatPrice(criticalPoints.vPoints[0].strike) }}
+              </td>
+              <td class="text-center py-3 px-2 text-emerald-300 font-mono">
+                {{ formatPrice(criticalPoints.vPoints[1].strike) }}
+              </td>
+              <td class="text-center py-3 px-2 text-emerald-300 font-mono">
+                {{ formatPrice(criticalPoints.vPoints[2].strike) }}
+              </td>
+              <td
+                class="text-center py-3 px-2 text-amber-300 font-bold font-mono"
+              >
+                {{ formatPrice(criticalPoints.atm) }}
+              </td>
+              <td class="text-center py-3 px-2 text-rose-300 font-mono">
+                {{ formatPrice(criticalPoints.bPoints[0].strike) }}
+              </td>
+              <td class="text-center py-3 px-2 text-rose-300 font-mono">
+                {{ formatPrice(criticalPoints.bPoints[1].strike) }}
+              </td>
+              <td class="text-center py-3 px-2 text-rose-300 font-mono">
+                {{ formatPrice(criticalPoints.bPoints[2].strike) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-10 text-center text-slate-500 text-sm">
+      <p class="mt-1">
+        Dados ilustrativos para fins educacionais. Consulte sempre um
+        profissional antes de operar.
+      </p>
+    </footer>
+  </div>
+</div>

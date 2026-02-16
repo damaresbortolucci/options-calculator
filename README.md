@@ -4,7 +4,7 @@ Calculadora de Níveis Críticos para Day Trade - Versão Angular
 
 ## 📋 Descrição
 
-Sistema convertido de React para Angular que calcula pontos críticos (B Points e V Points) baseados na superfície de volatilidade da B3 para operações de day trade no Dólar Futuro.
+Sistema em Angular que calcula pontos críticos (B Points e V Points) baseados na superfície de volatilidade da B3 para operações de day trade no Dólar Futuro.
 
 ## 🚀 Tecnologias
 
@@ -19,11 +19,30 @@ Sistema convertido de React para Angular que calcula pontos críticos (B Points 
 /
 ├── src/
 │   ├── app/
-│   │   ├── options-calculator.component.ts
-│   │   ├── options-calculator.component.html
-│   │   ├── options-calculator.component.css
+│   │   ├── dashboard/
+│   │   │   ├── components/           # Componentes reutilizáveis
+│   │   │   │   ├── educational-section/
+│   │   │   │   ├── atm-reference/
+│   │   │   │   ├── critical-points/
+│   │   │   │   ├── input-controls/
+│   │   │   │   ├── price-ladder/
+│   │   │   │   ├── strategies/
+│   │   │   │   └── volatility-table/
+│   │   │   ├── models/               # Interfaces e tipos
+│   │   │   │   └── volatility.model.ts
+│   │   │   ├── services/             # Lógica de negócio
+│   │   │   │   └── options-calculator.service.ts
+│   │   │   ├── constants/            # Configurações e constantes
+│   │   │   │   └── app.constants.ts
+│   │   │   ├── mocks/                # Dados de teste
+│   │   │   │   └── volatility.mock.ts
+│   │   │   ├── dashboard.component.ts
+│   │   │   ├── dashboard.component.html
+│   │   │   └── dashboard.component.css
 │   │   ├── app.component.ts
 │   │   └── app.module.ts
+│   ├── assets/
+│   │   └── img/
 │   ├── main.ts
 │   ├── index.html
 │   └── styles.css
@@ -36,16 +55,19 @@ Sistema convertido de React para Angular que calcula pontos críticos (B Points 
 ## 🛠️ Instalação
 
 1. **Instale as dependências:**
+
 ```bash
 npm install
 ```
 
 2. **Execute o projeto:**
+
 ```bash
 npm start
 ```
 
 3. **Acesse no navegador:**
+
 ```
 http://localhost:4200
 ```
@@ -60,50 +82,109 @@ http://localhost:4200
 - ✅ Superfície de Volatilidade Interativa
 - ✅ Seção Educacional sobre Delta Hedge
 - ✅ Interface responsiva e moderna
+- ✅ Arquitetura modular com separação de responsabilidades
+- ✅ Services injetáveis para lógica de negócio
+- ✅ Tipagem forte com TypeScript
 
-## 🎯 Principais Diferenças da Versão React
 
-### Gerenciamento de Estado
-- **React:** useState, useMemo, useEffect
-- **Angular:** Propriedades de classe, métodos, lifecycle hooks (ngOnInit)
+## 🏗️ Arquitetura
 
-### Sintaxe de Template
-- **React:** JSX com JavaScript embutido
-- **Angular:** HTML com diretivas Angular (*ngFor, *ngIf, [class], (click))
+O projeto segue uma arquitetura modular e escalável:
 
-### Two-Way Data Binding
-- **React:** Controlado via onChange e value
-- **Angular:** [(ngModel)] para binding bidirecional
+### Separação de Responsabilidades
 
-### Renderização Condicional
-- **React:** {condition && <Component />}
-- **Angular:** *ngIf="condition"
+- **Components:** Focados apenas em apresentação e interação com usuário
+- **Services:** Contêm toda a lógica de negócio e cálculos
+- **Models:** Definem interfaces e tipos TypeScript
+- **Constants:** Centralizam configurações e valores fixos
+- **Mocks:** Isolam dados de teste para facilitar desenvolvimento
 
-### Loops
-- **React:** {array.map(item => ...)}
-- **Angular:** *ngFor="let item of array"
+### Benefícios da Arquitetura
+
+- ✅ **Testabilidade:** Services podem ser testados isoladamente
+- ✅ **Manutenibilidade:** Código organizado e fácil de localizar
+- ✅ **Reutilização:** Componentes e services podem ser reutilizados
+- ✅ **Escalabilidade:** Fácil adicionar novos recursos sem afetar código existente
+- ✅ **Type Safety:** TypeScript garante tipagem em toda a aplicação
 
 ## 🔧 Componentes Principais
 
-### OptionsCalculatorComponent
+### DashboardComponent
 
-Componente principal que gerencia:
-- Dados de volatilidade
-- Cálculos de strikes
-- Pontos críticos (V Points e B Points)
-- Interações do usuário
+Componente principal que coordena:
 
-### Principais Métodos
+- Gerenciamento de estado (spot price, vencimento selecionado)
+- Integração com serviços de cálculo
+- Coordenação entre sub-componentes
+- Atualização de dados em tempo real
 
-- `updateCalculations()` - Atualiza todos os cálculos quando há mudança
+### Componentes Especializados
+
+#### InputControlsComponent
+
+Controles para entrada de dados (spot price, vencimento).
+
+#### EducationalSectionComponent
+
+Seção educacional sobre Delta Hedge e conceitos de mercado.
+
+#### CriticalPointsComponent
+
+Exibição dos V Points e B Points calculados.
+
+#### AtmReferenceComponent
+
+Referência do nível ATM (At-The-Money).
+
+#### PriceLadderComponent
+
+Escada de preços visual com marcações dos níveis críticos.
+
+#### VolatilityTableComponent
+
+Tabela interativa da superfície de volatilidade.
+
+#### DayTradingStrategyComponent
+
+Estratégias e recomendações para day trade.
+
+### OptionsCalculatorService
+
+Serviço responsável por toda a lógica de cálculos:
+
 - `calculateStrike()` - Calcula strike aproximado a partir do Delta
 - `getDaysToExpiry()` - Calcula dias até o vencimento
-- `calculateCriticalPoints()` - Calcula todos os pontos críticos
+- `calculateCriticalPoints()` - Calcula todos os pontos críticos (V e B)
 - `formatPrice()` - Formata preços para exibição
+
+### Models
+
+Interfaces TypeScript para tipagem forte:
+
+- `VolatilityData` - Dados de volatilidade por vencimento
+- `CriticalPoint` - Estrutura de um ponto crítico
+- `CriticalPoints` - Coleção de pontos críticos (V e B)
+- `DeltaPoint` - Configuração de pontos delta
+
+### Constants
+
+Configurações centralizadas:
+
+- `MONTHS_MAP` - Mapeamento de meses
+- `STRENGTH_COLORS` - Cores para níveis de força
+- `PUT_DELTAS_CONFIG` - Configuração dos V Points
+- `CALL_DELTAS_CONFIG` - Configuração dos B Points
+
+### Mocks
+
+Dados de teste para desenvolvimento:
+
+- `MOCK_VOLATILITY_DATA` - Superfície de volatilidade simulada
 
 ## 🎨 Estilização
 
 O projeto utiliza:
+
 - **Tailwind CSS** via CDN para utility classes
 - **CSS customizado** para animações e efeitos especiais
 - **Gradientes e efeitos glass** para visual moderno
@@ -111,12 +192,15 @@ O projeto utiliza:
 ## 📖 Conceitos Implementados
 
 ### Delta Hedge
+
 Mecanismo onde vendedores de opções ajustam posições no futuro para manter portfólio Delta-Neutro.
 
 ### V Points (Suportes)
+
 Níveis onde vendedores de Puts são forçados a vender, acelerando a queda.
 
 ### B Points (Resistências)
+
 Níveis onde vendedores de Calls são forçados a comprar, acelerando a alta.
 
 ## 🔄 Comandos Úteis
@@ -141,7 +225,9 @@ npm run serve
 2. **FormsModule:** Importado para usar [(ngModel)]
 3. **CommonModule:** Importado para usar diretivas estruturais
 4. **Tailwind CDN:** Usado para facilitar a configuração (considere instalação via npm em produção)
-
+5. **Arquitetura Modular:** Separação clara entre models, services, constants e mocks
+6. **Dependency Injection:** Services injetados para facilitar testes e manutenção
+7. **Type Safety:** Interfaces TypeScript garantem tipagem forte em todo o projeto
 
 ## ⚠️ Aviso Legal
 

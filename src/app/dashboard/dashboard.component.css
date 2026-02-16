@@ -1,6 +1,7 @@
 /* Animações personalizadas */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -13,7 +14,8 @@
 }
 
 @keyframes ping {
-  75%, 100% {
+  75%,
+  100% {
     transform: scale(2);
     opacity: 0;
   }
@@ -73,7 +75,8 @@ input[type="range"]::-moz-range-thumb {
 /* Gradientes personalizados */
 .from-violet-500\/80 {
   --tw-gradient-from: rgba(139, 92, 246, 0.8);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, transparent);
+  --tw-gradient-stops:
+    var(--tw-gradient-from), var(--tw-gradient-to, transparent);
 }
 
 .to-fuchsia-500\/80 {
@@ -82,7 +85,8 @@ input[type="range"]::-moz-range-thumb {
 
 .from-cyan-500\/80 {
   --tw-gradient-from: rgba(6, 182, 212, 0.8);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, transparent);
+  --tw-gradient-stops:
+    var(--tw-gradient-from), var(--tw-gradient-to, transparent);
 }
 
 .to-blue-500\/80 {
@@ -91,7 +95,8 @@ input[type="range"]::-moz-range-thumb {
 
 .from-emerald-500\/80 {
   --tw-gradient-from: rgba(16, 185, 129, 0.8);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, transparent);
+  --tw-gradient-stops:
+    var(--tw-gradient-from), var(--tw-gradient-to, transparent);
 }
 
 .to-teal-500\/80 {

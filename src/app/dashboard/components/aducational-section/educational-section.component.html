@@ -1,0 +1,81 @@
+<!-- Educational Toggle -->
+<button
+  (click)="toggleDetails()"
+  class="w-full backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl mb-8 text-left transition-all hover:bg-white/10"
+>
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-2xl">📚</span>
+      <span class="font-bold text-white"
+        >Entenda a Teoria: Delta Hedge e Pontos Críticos</span
+      >
+    </div>
+    <span [class]="'transition-transform ' + (showDetails ? 'rotate-180' : '')"
+      >▼</span
+    >
+  </div>
+</button>
+
+<div
+  *ngIf="showDetails"
+  class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl mb-8 space-y-6"
+>
+  <div>
+    <h4 class="font-bold text-cyan-400 mb-2">O que é Delta?</h4>
+    <p class="text-slate-300 text-sm">
+      O Delta mede a sensibilidade do preço da opção em relação ao preço do
+      ativo. No contexto da superfície de volatilidade, o Delta (%) serve como
+      proxy para a <strong>probabilidade</strong> da opção terminar "no
+      dinheiro" (ITM).
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-4">
+    <div class="bg-slate-800/50 rounded-xl p-4">
+      <span class="text-amber-400 font-bold">Delta 50 (ATM)</span>
+      <p class="text-slate-400 text-sm mt-1">
+        50% de chance de exercício. É o preço justo do mercado.
+      </p>
+    </div>
+    <div class="bg-slate-800/50 rounded-xl p-4">
+      <span class="text-cyan-400 font-bold">Delta 25/75</span>
+      <p class="text-slate-400 text-sm mt-1">
+        Proteções comuns. Exigem ajuste significativo de hedge.
+      </p>
+    </div>
+    <div class="bg-slate-800/50 rounded-xl p-4">
+      <span class="text-violet-400 font-bold">Delta 10/90</span>
+      <p class="text-slate-400 text-sm mt-1">
+        Proteções extremas. Seguro ultrabarato para cenários extremos.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <h4 class="font-bold text-cyan-400 mb-2">Mecanismo de Delta Hedge</h4>
+    <p class="text-slate-300 text-sm">
+      Quando o preço se aproxima de um B Point ou V Point, os grandes players
+      (vendedores de opções) são
+      <strong> obrigados</strong> a ajustar suas posições no Dólar Futuro para
+      manter o portfólio Delta-Neutro. Esse ajuste forçado cria
+      <strong>aceleração no movimento</strong> do preço.
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="bg-rose-500/10 border border-rose-500/20 rounded-xl p-4">
+      <h5 class="font-bold text-rose-400 mb-2">B Point Rompido ⬆️</h5>
+      <p class="text-slate-300 text-sm">
+        Vendedores de Calls precisam COMPRAR dólar futuro → Demanda aumenta →
+        Preço acelera para CIMA
+      </p>
+    </div>
+    <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4">
+      <h5 class="font-bold text-emerald-400 mb-2">V Point Rompido ⬇️</h5>
+      <p class="text-slate-300 text-sm">
+        Vendedores de Puts precisam VENDER dólar futuro → Oferta aumenta → Preço
+        acelera para BAIXO
+      </p>
+    </div>
+  </div>
+</div>

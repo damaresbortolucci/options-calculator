@@ -1,0 +1,105 @@
+<div class="grid md:grid-cols-2 gap-6 mb-8">
+  <!-- V Points - Suportes -->
+  <div
+    class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-emerald-500/20 shadow-2xl"
+  >
+    <div class="flex items-center gap-3 mb-6">
+      <div
+        class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center"
+      >
+        <span class="text-lg">📉</span>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-emerald-400">V Points</h2>
+        <p class="text-slate-500 text-sm">Suportes • Aceleração de Baixa</p>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <div
+        *ngFor="let point of criticalPoints.vPoints"
+        [class]="
+          'relative overflow-hidden rounded-2xl p-4 bg-gradient-to-r ' +
+          getStrengthColor(point.strength) +
+          ' backdrop-blur-sm'
+        "
+      >
+        <div class="absolute inset-0 bg-slate-900/60"></div>
+        <div class="relative flex items-center justify-between">
+          <div>
+            <span class="text-xs text-emerald-300 uppercase tracking-wider">{{
+              point.label
+            }}</span>
+            <p class="text-2xl font-black text-white">
+              {{ formatPrice(point.strike) }}
+            </p>
+          </div>
+          <div class="text-right">
+            <span class="text-xs text-slate-400">Delta {{ point.delta }}%</span>
+            <p class="text-sm text-emerald-300">Vol: {{ point.vol }}%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="mt-4 p-4 bg-emerald-500/10 rounded-xl border border-emerald-500/20"
+    >
+      <p class="text-sm text-slate-300">
+        <strong class="text-emerald-400">Se rompido:</strong> Vendedores de Puts
+        são forçados a VENDER dólar futuro, acelerando a queda.
+      </p>
+    </div>
+  </div>
+
+  <!-- B Points - Resistências -->
+  <div
+    class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-rose-500/20 shadow-2xl"
+  >
+    <div class="flex items-center gap-3 mb-6">
+      <div
+        class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-400 to-red-600 flex items-center justify-center"
+      >
+        <span class="text-lg">📈</span>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-rose-400">B Points</h2>
+        <p class="text-slate-500 text-sm">Resistências • Aceleração de Alta</p>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <div
+        *ngFor="let point of criticalPoints.bPoints"
+        [class]="
+          'relative overflow-hidden rounded-2xl p-4 bg-gradient-to-r ' +
+          getStrengthColor(point.strength) +
+          ' backdrop-blur-sm'
+        "
+      >
+        <div class="absolute inset-0 bg-slate-900/60"></div>
+        <div class="relative flex items-center justify-between">
+          <div>
+            <span class="text-xs text-rose-300 uppercase tracking-wider">{{
+              point.label
+            }}</span>
+            <p class="text-2xl font-black text-white">
+              {{ formatPrice(point.strike) }}
+            </p>
+          </div>
+          <div class="text-right">
+            <span class="text-xs text-slate-400">Delta {{ point.delta }}%</span>
+            <p class="text-sm text-rose-300">Vol: {{ point.vol }}%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 p-4 bg-rose-500/10 rounded-xl border border-rose-500/20">
+      <p class="text-sm text-slate-300">
+        <strong class="text-rose-400">Se rompido:</strong> Vendedores de Calls
+        são forçados a COMPRAR dólar futuro, acelerando a alta.
+      </p>
+    </div>
+  </div>
+</div>

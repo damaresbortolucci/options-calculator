@@ -1,0 +1,85 @@
+<div
+  class="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white p-4 md:p-8 font-sans"
+>
+  <!-- Liquid Glass Background Effects -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div
+      class="absolute top-20 left-10 w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-transparent rounded-full blur-3xl animate-pulse"
+    ></div>
+    <div
+      class="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-br from-violet-500/20 to-transparent rounded-full blur-3xl animate-pulse"
+      style="animation-delay: 1s"
+    ></div>
+    <div
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-blue-500/10 to-transparent rounded-full blur-3xl"
+    ></div>
+  </div>
+
+  <div class="relative max-w-6xl mx-auto">
+    <!-- Header -->
+    <header class="text-center mb-10">
+      <div class="inline-flex items-center gap-3 mb-4">
+        <img
+          src="../assets/img/xandao-dolar-logo.png"
+          alt="Xandão Dólar Logo"
+          class="w-52 flex items-center justify-center"
+        />
+      </div>
+      <h1
+        class="text-4xl md:text-5xl font-black bg-gradient-to-r from-white via-cyan-200 to-white bg-clip-text text-transparent mb-3"
+      >
+        B Points & V Points
+      </h1>
+      <p class="text-slate-400 text-lg">
+        Calculadora de Níveis Críticos para Day Trade
+      </p>
+      <p class="text-slate-500 text-sm mt-2">
+        14 de Fevereiro de 2026 • Superfície de Volatilidade B3
+      </p>
+    </header>
+
+    <!-- Input Controls -->
+    <input-controls
+      [spotPrice]="spotPrice"
+      (spotPriceChange)="onSpotPriceChange(); spotPrice = $event"
+      [selectedExpiry]="selectedExpiry"
+      (selectedExpiryChange)="onExpiryChange($event)"
+      [expiries]="getFirstSixExpiries()"
+      [daysToExpiry]="daysToExpiry"
+    ></input-controls>
+
+    <!-- ATM Reference -->
+    <atm-reference [criticalPoints]="criticalPoints"></atm-reference>
+
+    <!-- Critical Points Grid -->
+    <critical-points [criticalPoints]="criticalPoints"></critical-points>
+
+    <!-- Visual Price Ladder -->
+    <price-ladder
+      [spotPrice]="spotPrice"
+      [criticalPoints]="criticalPoints"
+    ></price-ladder>
+
+    <!-- Strategy Tips -->
+    <day-trading-strategy
+      [criticalPoints]="criticalPoints"
+    ></day-trading-strategy>
+
+    <!-- Educational Section Component -->
+    <educational-section></educational-section>
+
+    <!-- Volatility Surface Mini Table -->
+    <volatility-table
+      [selectedExpiry]="selectedExpiry"
+      [selectedData]="selectedData"
+    ></volatility-table>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-10 text-center text-slate-400 text-sm">
+    <p class="mt-1">
+      Dados ilustrativos para fins educacionais. Consulte sempre um profissional
+      antes de operar.
+    </p>
+  </footer>
+</div>

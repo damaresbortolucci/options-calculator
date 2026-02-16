@@ -1,19 +1,14 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { FormsModule } from "@angular/forms";
 
-import { AppComponent } from './app.component';
-import { OptionsCalculatorComponent } from './options-calculator.component';
+import { AppComponent } from "./app.component";
+import { DashboardComponent } from "./dashboard/dashboard.component";
 
 @NgModule({
   declarations: [],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    AppComponent,
-    OptionsCalculatorComponent
-  ],
+  imports: [BrowserModule, FormsModule, AppComponent, DashboardComponent],
   providers: [],
-  bootstrap: []
+  bootstrap: [],
 })
-export class AppModule { }
+export class AppModule {}

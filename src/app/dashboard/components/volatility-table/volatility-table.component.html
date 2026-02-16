@@ -1,0 +1,51 @@
+<div
+  class="backdrop-blur-xl bg-white/5 rounded-3xl p-6 border border-white/10 shadow-2xl"
+>
+  <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+    <span>📈</span> Superfície de Volatilidade (Vencimento:
+    {{ selectedExpiry.toUpperCase() }})
+  </h3>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-white/10">
+          <th class="text-left py-3 px-2 text-slate-400 font-medium">Delta</th>
+          <th class="text-center py-3 px-2 text-emerald-400">10%</th>
+          <th class="text-center py-3 px-2 text-emerald-400">25%</th>
+          <th class="text-center py-3 px-2 text-emerald-400">37%</th>
+          <th class="text-center py-3 px-2 text-amber-400 font-bold">50%</th>
+          <th class="text-center py-3 px-2 text-rose-400">63%</th>
+          <th class="text-center py-3 px-2 text-rose-400">75%</th>
+          <th class="text-center py-3 px-2 text-rose-400">90%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="py-3 px-2 text-slate-400">Vol. Implícita</td>
+          <td class="text-center py-3 px-2 text-emerald-300">
+            {{ selectedData.d10 }}%
+          </td>
+          <td class="text-center py-3 px-2 text-emerald-300">
+            {{ selectedData.d25 }}%
+          </td>
+          <td class="text-center py-3 px-2 text-emerald-300">
+            {{ selectedData.d37 }}%
+          </td>
+          <td class="text-center py-3 px-2 text-amber-300 font-bold">
+            {{ selectedData.d50 }}%
+          </td>
+          <td class="text-center py-3 px-2 text-rose-300">
+            {{ selectedData.d63 }}%
+          </td>
+          <td class="text-center py-3 px-2 text-rose-300">
+            {{ selectedData.d75 }}%
+          </td>
+          <td class="text-center py-3 px-2 text-rose-300">
+            {{ selectedData.d90 }}%
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

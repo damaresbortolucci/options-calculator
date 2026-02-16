@@ -1,0 +1,27 @@
+<div
+  class="backdrop-blur-xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 rounded-3xl p-6 mb-8 border border-amber-500/20"
+>
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <span class="text-amber-400 text-sm uppercase tracking-wider"
+        >Referência ATM (Delta 50)</span
+      >
+      <p class="text-3xl font-black text-white mt-1">
+        {{ formatPrice(criticalPoints.atm) }}
+        <span class="text-lg text-slate-400">pontos</span>
+      </p>
+    </div>
+    <div class="flex items-center gap-6">
+      <div>
+        <span class="text-slate-500 text-xs uppercase">Vol. Implícita</span>
+        <p class="text-xl font-bold text-amber-400">
+          {{ criticalPoints.atmVol }}%
+        </p>
+      </div>
+      <div>
+        <span class="text-slate-500 text-xs uppercase">Probabilidade</span>
+        <p class="text-xl font-bold text-amber-400">50%</p>
+      </div>
+    </div>
+  </div>
+</div>

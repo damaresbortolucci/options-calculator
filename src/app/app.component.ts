@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
-import { OptionsCalculatorComponent } from './options-calculator.component';
+import { Component } from "@angular/core";
+import { DashboardComponent } from "./dashboard/dashboard.component";
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   standalone: true,
-  imports: [OptionsCalculatorComponent],
-  template: `<app-options-calculator></app-options-calculator>`,
-  styles: []
+  imports: [DashboardComponent],
+  template: `<dashboard></dashboard>`,
+  styles: [],
 })
 export class AppComponent {
-  title = 'b-points-v-points-calculator';
+  title = "b-points-v-points-calculator";
 }
